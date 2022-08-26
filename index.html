@@ -1,0 +1,444 @@
+<!DOCTYPE HTML>
+<!--
+	Paradigm Shift by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Drexel Capstone Project</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Intro -->
+					<section class="intro">
+						<header>
+							<h5>Predicting influenza vaccination distribution using search engine behavior</h5>
+							<p>A capstone project by Ashley Wheeler, Tien Nguyen, Jackie Glosson, and Andrew Chen</a></p>
+							<a href="VaccinationDashboard.html" class="button large">Project Dashboard</a>
+							<ul class="actions">
+								<!-- <li><a href="#first" class="arrow scrolly"><span class="label">Next</span></a></li> -->
+							</ul>
+						</header>
+						<div class="content">
+							<span class="image fill" data-position="center"><img src="images/pic01.jpg" alt="" /></span>
+						</div>
+					</section>
+
+
+
+				<!-- Section -->
+					<section id="first">
+						<header>
+							<h2>Background</h2>
+						</header>
+						<div class="content">
+							<p> Each year, the Centers for Disease Control and Prevention (CDC) dedicates millions of dollars of funding to measure, predict, and mitigate the spread of influenza throughout the population. In recent years, search engine behavior has proved to be a viable tool in detecting when influenza spreads uptick (Ginsberg et al., 2009). As the disease spreads, individuals are more likely to search for their symptoms, leaving a traceable digital footprint. <strong>This project sought to utlize google search engine behaviore to predict influenza vaccination distribution. </strong> The project was broken into two separate portions:  <strong>(1)</strong> search engine behavior was forecasted for the upcoming (2022-2023) flu season based on historical data <strong>(2)</strong> Search engine predictions and additional factors (demographic makeup, political affiliation, temperature) were used to predict influenza vaccine distribution for the upcoming (2022-2023) flu season.</p>
+						</div>
+					</section>
+
+				<!-- Section -->
+					<section>
+						<header>
+							<h2>Acqusition & Preprocessing</h2>
+							<p></p>
+						</header>
+						<div class="content">
+							<p><i>"Influenza vaccination rates are relatively high among adults in older age groups (73.3% among 75 + year old), adults with education levels of bachelor’s degree or higher (45.1%), non-Hispanic Whites (41.8%), adults with higher incomes (52.8% among adults with income of over $150,000)....adults with internet access (39.9%)....41.8% of adults with health insurance get vaccinated, while 72.3% of adults without health insurance never get vaccinated." </i>   (Abbas et al., 2018) </p>
+							<p><strong>Based on prior research, we selected the following factors for inclusion into our prediction model: </strong></p>
+							<ul class="feature-icons">
+								<li class="icon solid fa-map-marker-alt">Google Trends</li>
+								<li class="icon solid fa-map-marker-alt">Over 65 Years</li>
+								<li class="icon solid fa-map-marker-alt">Household Income</li>
+								<li class="icon solid fa-map-marker-alt">Bachelor's Degree</li>
+								<li class="icon solid fa-map-marker-alt">Race</li>
+								<li class="icon solid fa-map-marker-alt">Health Insurance</li>
+								<li class="icon solid fa-map-marker-alt">Political Affliation</li>
+								<li class="icon solid fa-map-marker-alt">Temperature</li>
+							</ul>
+							<p><strong>STATES EXAMINED</strong> We identified the 5 states where the term "flu shot" was searched the most, and 5 states where it was searched the least. Data for the project was collected for these 10 states: Massachusetts, Connecticut, Maryland, Pennsylvania, Minnesota, Mississippi, Idaho, Wyoming, Louisiana, Montana
+							<p><strong>TIME FRAME</strong> The time period examined was from April 2017 to April 2022 at monthly intervals.</p>
+							<p><strong>SEARCH QUERIES</strong> Five search query phrases were identified for analysis from google trends: “get flu shot”, “flu shot”, “flu shot near me”, “flu vaccine”, and “flu shot side effects”.</p>
+						</p>
+						</div>
+					</section>
+
+				<!-- Section -->
+					<section>
+						<header>
+							<h2>Interpolation & Concatenation</h2>
+						</header>
+						<div class="content">
+							<p><strong>CONCATENATION</strong> We concatenated a total of 22 datasets together.</p>
+							<p><strong>MISSING DATA</strong> There were multiple instances of missing data. Median houshold income, bachelor's attainment, and racial composition were all missing for the year of 2021, as census data postings were delayed from the effects of the COVID-19 pandemic. Two interpolation methods were tested, with the result method being a combination of linear regression and interpolation.</p>
+							<p><strong>INTERPOLATION</strong> Most of our data sources were not interspaced at monthly time intervals, thus data had to be interpolated. For example, all data collected from the census website was collected annually or bi-annually, therefore monthly values had to be approximated. </p>
+							<p> Distributions and descriptive statistics were compared before and after interpolation for each variable. Metrics were found to be similar, with no drastic compositional changes.</p>
+							<a href="media/Data Acquisition and Per-Processing Report.pdf" class="button large">Preprocessing Report</a>
+							
+							
+					<!-- Section -->
+						<section>
+							<header>
+								<h2>Exploratory Data Analysis</h2>
+							</header>
+							<div class="content">
+								<video width="480" height="360" controls="controls" src="media/EDA_Presentation.mp4"></video>
+								<p><strong>GOOGLE QUERY SELECTION </strong>  The google trends search term “FLU SHOT” has notably the largest standard deviation (or largest variance) of all search terms. We can know why this is by learning how the google trends data is obtained. Google trends data normalizes data with respect to the queries (maximum of five) examined together. In this instance, the query of “FLU SHOT” was searched more times than any other query overall – we know this because google trends assigns a maximum value of 100 to the data point representing the most significant number of searches for that period of time and group of queries. We can also detect that the term “FLU SHOT” was searched the most from the mean. When we consider which search query to use in our model, we will want to take this into account, as the other search queries may not capture as much variance as our FLU SHOT query since the way it is normalized through google trends “compresses” the other queries. Therefore we will select the “FLU SHOT” variable for our google trends variable.</p>
+								<p><strong>DATA VARIANCE </strong>  Overall, we see minimal variance (small standard deviation) in our demographic variables. Minimal variance is expected, as these values within states change very little over time- perhaps only a few decimal places. For example, PERCENT_OVER_65, WHITE, BLACK, PERCENT_VOTED_DEMOCRATIC, and PERCENT_VOTED_REPUBLICAN all have standard deviations of less than one. </p>
+								<p><strong>CORRELATIONS </strong>  We observe that the only variables strongly correlated with VAX_PERCENT_DISTRIBUTION were google trends variables. All other variables demonstrate weak or no correlation to this target variable. </p>
+								<div class="gallery">
+									<a href="images/gallery/fulls/01.jpg" class="landscape"><img src="images/gallery/thumbs/01.jpg" alt="" /></a>
+									<a href="images/gallery/fulls/04.jpg" class="landscape"><img src="images/gallery/thumbs/04.jpg" alt="" /></a>
+								</div>
+								<a href="media/Exploratory Data Analytics Report.pdf" class="button large">EDA Report</a>
+							</div>
+						</section>
+
+						<!-- Section -->
+							<section>
+								<header>
+									<h2>Predicting Search Query Behavior</h2>
+								</header>
+								<div class="content">
+									<video width="480" height="360" controls="controls" src="media/Forecasting Google Trends Data.mp4"></video>
+							
+									<p><strong>ALGORITHMS EXAMINED</strong> Three seperate algorithms were tested on a single state's data: SARIMA, RNN LSTM, and RNN. Algorithm performance was compared, and SARIMA was decided to be the algorithm of best fit based on its comparatively lower root mean squared error (RMSE= 14.1) and higher R-squared value (R2=0.77). SARIMA also had the most consistent performance when applied across states.</p>
+									<p><strong>SARIMA</strong> Seasonal Autoregressive Integrated Moving Average (SARIMA) is a time series forecasting algorithm. In many time series data, seasonal effects come into play so there is a cyclical rise and fall or seasonality cycles in the data. SARIMA takes the seasonality cycles into consideration to predict future values.</p>
+									<ul class="actions">
+										<li><a href="dashboard.html" class="button primary large">Forecasting Dashboard</a></li>
+										<li><a href="media/Google Trends Predictive Modeling Report.pdf" class="button large">Forecasting Report</a></li>
+									</ul>							
+								</div>
+							</section>
+
+						<!-- Section -->
+						<section>
+							<header>
+								<h2>Predicting Vaccine Distribution</h2>
+							</header>
+							<div class="content">
+								<video width="480" height="360" controls="controls" src="media/q2-final-presentation.mp4"></video>
+								<p><strong>ALGORITHMS EXAMINED</strong> Three models were examined for predicting vaccination distribution: linear regression, random forest, and gradient boosting. Linear regression was utlized as a baseline algorithm. Hyperparameter training was performed on decision tree and gradient boosting models. The resulting R Squared values for testing and validation are shown below.</p>
+								<p><strong>ALGORITHM SELECTED</strong> Due to their high R squared and low RMSE in both training and validation, both random forest and gradient boosting were used to predicting final vaccine distribution, depending which model performed better for the state. Results are shown in the final dashboard below.</p>
+								<div class="gallery">
+									<a href="images/gallery/fulls/train.png" class="landscape"><img src="images/gallery/thumbs/train.png" alt="" /></a>
+									<a href="images/gallery/fulls/valid.png" class="landscape"><img src="images/gallery/thumbs/valid.png" alt="" /></a>
+								</div>
+								<div class="gallery">							
+
+								</div>		
+								
+												
+							</div>
+						</section>
+
+					<!-- Section -->
+					<section>
+						<header>
+							<h2>Final Product</h2>
+						</header>
+						<div class="content">
+							<ul class="actions">
+								<li><a href="VaccinationDashboard.html" class="button primary large">Final Dashboard</a></li>
+								<li><a href="media/DSCI 592 Predictive Modeling Report template (1).pdf" class="button large">Final Report</a></li></li>
+							</ul>					
+														
+						</div>
+					</section>
+
+				<!-- Elements -->
+				<!--
+					<section>
+						<header>
+							<h2>Elements</h2>
+						</header>
+						<div class="content">
+
+							<section>
+								<header>
+									<h3>Text</h3>
+								</header>
+								<div class="content">
+									<p>This is <b>bold</b> and this is <strong>strong</strong>. This is <i>italic</i> and this is <em>emphasized</em>.
+									This is <sup>superscript</sup> text and this is <sub>subscript</sub> text.
+									This is <u>underlined</u> and this is code: <code>for (;;) { ... }</code>. Finally, <a href="#">this is a link</a>.</p>
+									<hr />
+									<h2>Heading Level 2</h2>
+									<h3>Heading Level 3</h3>
+									<h4>Heading Level 4</h4>
+									<h5>Heading Level 5</h5>
+									<hr />
+									<h5>Blockquote</h5>
+									<blockquote>Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan faucibus. Vestibulum ante ipsum primis in faucibus lorem ipsum dolor sit amet nullam adipiscing eu felis.</blockquote>
+									<h5>Preformatted</h5>
+									<pre><code>i = 0;
+
+while (!deck.isInOrder()) {
+  print 'Iteration ' + i;
+  deck.shuffle();
+  i++;
+}
+
+print 'Sorted in ' + i + ' iterations.';</code></pre>
+								</div>
+							</section>
+
+							<section>
+								<header>
+									<h3>Lists</h3>
+								</header>
+								<div class="content">
+
+									<h4>Unordered</h4>
+									<ul>
+										<li>Dolor pulvinar etiam.</li>
+										<li>Sagittis adipiscing.</li>
+										<li>Felis enim feugiat.</li>
+									</ul>
+
+									<h4>Alternate</h4>
+									<ul class="alt">
+										<li>Dolor pulvinar etiam.</li>
+										<li>Sagittis adipiscing.</li>
+										<li>Felis enim feugiat.</li>
+									</ul>
+
+									<h4>Ordered</h4>
+									<ol>
+										<li>Dolor pulvinar etiam.</li>
+										<li>Etiam vel felis viverra.</li>
+										<li>Felis enim feugiat.</li>
+										<li>Dolor pulvinar etiam.</li>
+										<li>Etiam vel felis lorem.</li>
+										<li>Felis enim et feugiat.</li>
+									</ol>
+									<h4>Icons</h4>
+									<ul class="icons">
+										<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+										<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+										<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+										<li><a href="#" class="icon brands fa-github"><span class="label">Github</span></a></li>
+									</ul>
+
+									<h4>Actions</h4>
+									<ul class="actions">
+										<li><a href="#" class="button primary">Default</a></li>
+										<li><a href="#" class="button">Default</a></li>
+									</ul>
+									<ul class="actions stacked">
+										<li><a href="#" class="button primary">Default</a></li>
+										<li><a href="#" class="button">Default</a></li>
+									</ul>
+								</div>
+							</section>
+
+							<section>
+								<header>
+									<h3>Table</h3>
+								</header>
+								<div class="content">
+									<h4>Default</h4>
+									<div class="table-wrapper">
+										<table>
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Description</th>
+													<th>Price</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>Item One</td>
+													<td>Ante turpis integer aliquet porttitor.</td>
+													<td>29.99</td>
+												</tr>
+												<tr>
+													<td>Item Two</td>
+													<td>Vis ac commodo adipiscing arcu aliquet.</td>
+													<td>19.99</td>
+												</tr>
+												<tr>
+													<td>Item Three</td>
+													<td> Morbi faucibus arcu accumsan lorem.</td>
+													<td>29.99</td>
+												</tr>
+												<tr>
+													<td>Item Four</td>
+													<td>Vitae integer tempus condimentum.</td>
+													<td>19.99</td>
+												</tr>
+												<tr>
+													<td>Item Five</td>
+													<td>Ante turpis integer aliquet porttitor.</td>
+													<td>29.99</td>
+												</tr>
+											</tbody>
+											<tfoot>
+												<tr>
+													<td colspan="2"></td>
+													<td>100.00</td>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+
+									<h4>Alternate</h4>
+									<div class="table-wrapper">
+										<table class="alt">
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Description</th>
+													<th>Price</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>Item One</td>
+													<td>Ante turpis integer aliquet porttitor.</td>
+													<td>29.99</td>
+												</tr>
+												<tr>
+													<td>Item Two</td>
+													<td>Vis ac commodo adipiscing arcu aliquet.</td>
+													<td>19.99</td>
+												</tr>
+												<tr>
+													<td>Item Three</td>
+													<td> Morbi faucibus arcu accumsan lorem.</td>
+													<td>29.99</td>
+												</tr>
+												<tr>
+													<td>Item Four</td>
+													<td>Vitae integer tempus condimentum.</td>
+													<td>19.99</td>
+												</tr>
+												<tr>
+													<td>Item Five</td>
+													<td>Ante turpis integer aliquet porttitor.</td>
+													<td>29.99</td>
+												</tr>
+											</tbody>
+											<tfoot>
+												<tr>
+													<td colspan="2"></td>
+													<td>100.00</td>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</section>
+
+							<section>
+								<header>
+									<h3>Buttons</h3>
+								</header>
+								<div class="content">
+									<ul class="actions">
+										<li><a href="#" class="button primary">Primary</a></li>
+										<li><a href="#" class="button">Default</a></li>
+									</ul>
+									<ul class="actions">
+										<li><a href="#" class="button large">Large</a></li>
+										<li><a href="#" class="button">Default</a></li>
+										<li><a href="#" class="button small">Small</a></li>
+									</ul>
+									<ul class="actions">
+										<li><a href="#" class="button primary icon solid fa-download">Icon</a></li>
+										<li><a href="#" class="button icon solid fa-download">Icon</a></li>
+									</ul>
+									<ul class="actions">
+										<li><span class="button primary disabled">Disabled</span></li>
+										<li><span class="button disabled">Disabled</span></li>
+									</ul>
+								</div>
+							</section>
+
+							<section>
+								<header>
+									<h3>Form</h3>
+								</header>
+								<div class="content">
+									<form method="post" action="#">
+										<div class="fields">
+											<div class="field half">
+												<label for="demo-name">Name</label>
+												<input type="text" name="demo-name" id="demo-name" value="" placeholder="Jane Doe" />
+											</div>
+											<div class="field half">
+												<label for="demo-email">Email</label>
+												<input type="email" name="demo-email" id="demo-email" value="" placeholder="jane@untitled.tld" />
+											</div>
+											<div class="field">
+												<label for="demo-category">Category</label>
+												<select name="demo-category" id="demo-category">
+													<option value="">-</option>
+													<option value="1">Manufacturing</option>
+													<option value="1">Shipping</option>
+													<option value="1">Administration</option>
+													<option value="1">Human Resources</option>
+												</select>
+											</div>
+											<div class="field half">
+												<input type="radio" id="demo-priority-low" name="demo-priority" checked>
+												<label for="demo-priority-low">Low</label>
+											</div>
+											<div class="field half">
+												<input type="radio" id="demo-priority-high" name="demo-priority">
+												<label for="demo-priority-high">High</label>
+											</div>
+											<div class="field half">
+												<input type="checkbox" id="demo-copy" name="demo-copy">
+												<label for="demo-copy">Email me a copy</label>
+											</div>
+											<div class="field half">
+												<input type="checkbox" id="demo-human" name="demo-human" checked>
+												<label for="demo-human">Not a robot</label>
+											</div>
+											<div class="field">
+												<label for="demo-message">Message</label>
+												<textarea name="demo-message" id="demo-message" placeholder="Enter your message" rows="6"></textarea>
+											</div>
+										</div>
+										<ul class="actions">
+											<li><input type="submit" value="Send Message" class="primary" /></li>
+											<li><input type="reset" value="Reset" /></li>
+										</ul>
+									</form>
+								</div>
+							</section>
+
+						</div>
+					</section>
+				-->
+
+				<!-- Section -->
+					
+						
+					</section>
+
+				<!-- Copyright -->
+					
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
